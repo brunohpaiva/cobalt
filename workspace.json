@@ -96,9 +96,52 @@
           }
         }
       }
+    },
+    "test-app": {
+      "root": "packages/test-app",
+      "sourceRoot": "packages/test-app/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/packages/test-app",
+            "main": "packages/test-app/src/main.ts",
+            "tsConfig": "packages/test-app/tsconfig.app.json",
+            "assets": ["packages/test-app/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "packages/test-app/src/environments/environment.ts",
+                  "with": "packages/test-app/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "test-app:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/test-app/**/*.ts"]
+          }
+        }
+      }
     }
   },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/node"
+  },
+  "defaultProject": "test-app"
 }

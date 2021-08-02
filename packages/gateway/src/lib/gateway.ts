@@ -1,3 +1,5 @@
+import { http } from '@cobalt/http';
+
 export function gateway(): string {
-  return 'gateway';
+  return 'gateway ' + http();
 }

@@ -38,6 +38,9 @@
     },
     "rest": {
       "tags": []
+    },
+    "test-app": {
+      "tags": []
     }
   },
   "workspaceLayout": {
