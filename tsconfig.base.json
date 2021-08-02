@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@cobalt/gateway": ["packages/gateway/src/index.ts"],
+      "@cobalt/http": ["packages/http/src/index.ts"],
       "@cobalt/rest": ["packages/rest/src/index.ts"]
     }
   },
