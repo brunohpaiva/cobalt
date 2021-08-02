@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@cobalt/gateway": ["packages/gateway/src/index.ts"],
+      "@cobalt/rest": ["packages/rest/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -1,6 +1,71 @@
 {
   "version": 2,
-  "projects": {},
+  "projects": {
+    "gateway": {
+      "root": "packages/gateway",
+      "sourceRoot": "packages/gateway/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/gateway/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/gateway"],
+          "options": {
+            "jestConfig": "packages/gateway/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/packages/gateway",
+            "tsConfig": "packages/gateway/tsconfig.lib.json",
+            "packageJson": "packages/gateway/package.json",
+            "main": "packages/gateway/src/index.ts",
+            "assets": ["packages/gateway/*.md"]
+          }
+        }
+      }
+    },
+    "rest": {
+      "root": "packages/rest",
+      "sourceRoot": "packages/rest/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/rest/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/rest"],
+          "options": {
+            "jestConfig": "packages/rest/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/packages/rest",
+            "tsConfig": "packages/rest/tsconfig.lib.json",
+            "packageJson": "packages/rest/package.json",
+            "main": "packages/rest/src/index.ts",
+            "assets": ["packages/rest/*.md"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   }
