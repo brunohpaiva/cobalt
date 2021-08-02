@@ -23,13 +23,17 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "cz": "cz",
+    "postinstall": "husky install"
   },
   "private": true,
   "dependencies": {
     "tslib": "^2.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
     "@nrwl/cli": "12.6.3",
     "@nrwl/eslint-plugin-nx": "12.6.3",
     "@nrwl/jest": "12.6.3",
@@ -43,13 +47,26 @@
     "@typescript-eslint/eslint-plugin": "~4.28.3",
     "@typescript-eslint/parser": "~4.28.3",
     "@yarnpkg/pnpify": "^3.0.0-rc.14",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "3.3.0",
     "dotenv": "~10.0.0",
     "eslint": "7.22.0",
     "eslint-config-prettier": "8.1.0",
+    "husky": "^7.0.1",
     "jest": "27.0.3",
     "prettier": "^2.3.1",
     "ts-jest": "27.0.3",
     "ts-node": "~9.1.1",
     "typescript": "~4.3.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
