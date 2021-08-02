@@ -1,3 +1,11 @@
-import { gateway } from '@cobalt/gateway';
+import { startGateway } from '@cobalt/gateway';
 
-console.log(gateway());
+async function main() {
+  await startGateway({
+    botToken: process.env.TOKEN ?? '',
+    shardsPerCluster: 3,
+    shardsCount: 15,
+  });
+}
+
+main();
