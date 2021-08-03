@@ -4,7 +4,7 @@ async function main() {
   await startGateway({
     botToken: process.env.TOKEN ?? '',
     shardsPerCluster: 3,
-    shardsCount: 15,
+    shardsCount: 1,
   });
 }
 

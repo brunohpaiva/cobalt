@@ -3,9 +3,13 @@ import {
   CobaltGatewayConfig,
   CobaltGatewayState,
   DApiGatewayBot,
+  GatewayVersion,
 } from './types';
 import { get } from '@cobalt/http';
 import { logger } from '../logger';
+import { startShard } from './startShard';
+
+const DEFAULT_GATEWAY_VERSION: GatewayVersion = '9';
 
 export async function startGateway(config: CobaltGatewayConfig) {
   const state = {} as CobaltGatewayState;
@@ -13,8 +17,20 @@ export async function startGateway(config: CobaltGatewayConfig) {
   const gatewayInfo = await get<DApiGatewayBot>(config.botToken, 'gateway/bot');
   // TODO: error handling
 
-  state.gatewayUrl = config.gatewayUrl ?? gatewayInfo.url;
-  logger.log('info', 'Gateway URL: %s', state.gatewayUrl);
+  state.connection = {
+    url: config.connection?.url ?? gatewayInfo.url,
+    version: config.connection?.version ?? DEFAULT_GATEWAY_VERSION,
+    encoding: config.connection?.encoding ?? 'json',
+    compress: config.connection?.compress ?? 'zlib-stream',
+  };
+  logger.log(
+    'info',
+    'Gateway connection: URL "%s" Version "%s" Encoding "%s" Compression "%s"',
+    state.connection.url,
+    state.connection.version,
+    state.connection.encoding,
+    state.connection.compress
+  );
 
   state.recommendedShardsCount = config.shardsCount ?? gatewayInfo.shards;
   logger.log(
@@ -28,6 +44,9 @@ export async function startGateway(config: CobaltGatewayConfig) {
     config.shardsPerCluster,
     gatewayInfo.session_start_limit.max_concurrency
   );
+
+  const intents = config.intents ?? [];
+  state.intentsBit = intents.reduce((prev, curr) => (prev |= curr), 0);
 
   for (const bucket of state.buckets) {
     logger.log('info', 'Starting bucket %d', bucket.id);
@@ -49,7 +68,7 @@ export async function startGateway(config: CobaltGatewayConfig) {
           bucket.id
         );
 
-        // TODO: start shard
+        startShard(shard, state);
       }
     }
   }

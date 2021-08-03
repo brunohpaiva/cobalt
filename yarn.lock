@@ -1347,6 +1347,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ws@npm:^7.4.7":
+  version: 7.4.7
+  resolution: "@types/ws@npm:7.4.7"
+  dependencies:
+    "@types/node": "*"
+  checksum: b4c9b8ad209620c9b21e78314ce4ff07515c0cadab9af101c1651e7bfb992d7fd933bd8b9c99d110738fd6db523ed15f82f29f50b45510288da72e964dedb1a3
+  languageName: node
+  linkType: hard
+
 "@types/yargs-parser@npm:*":
   version: 20.2.1
   resolution: "@types/yargs-parser@npm:20.2.1"
@@ -2983,6 +2992,7 @@ __metadata:
     "@types/jest": 26.0.24
     "@types/node": 14.14.33
     "@types/node-fetch": ^2
+    "@types/ws": ^7.4.7
     "@typescript-eslint/eslint-plugin": ~4.28.3
     "@typescript-eslint/parser": ~4.28.3
     "@yarnpkg/pnpify": ^3.0.0-rc.14
@@ -3000,6 +3010,7 @@ __metadata:
     tslib: ^2.0.0
     typescript: ~4.3.5
     winston: ^3.3.3
+    ws: ^8.0.0
   languageName: unknown
   linkType: soft
 
@@ -10466,6 +10477,21 @@ typescript@~4.3.5:
     utf-8-validate:
       optional: true
   checksum: 423dc0d859fa74020f5555140905b862470a60ea1567bb9ad55a087263d7718b9c94f69678be1cee9868925c570f1e6fc79d09f90c39057bc63fa2edbb2c547b
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "ws@npm:8.0.0"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ^5.0.2
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 8f1b802f9c0da799aecf26cfdc498f93e903b822dcad83bd75f98c26d67d0f15354841c895ba647a0ba443e10cb6043934f2b9c9ff8139c52efc8745c3965420
   languageName: node
   linkType: hard
 
