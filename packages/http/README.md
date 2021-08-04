@@ -1,7 +1,3 @@
-# http
+# HTTP
 
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `nx test http` to execute the unit tests via [Jest](https://jestjs.io).
+Node.js library responsible for providing utility methods for HTTP requests.

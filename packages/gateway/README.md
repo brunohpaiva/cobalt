@@ -1,7 +1,3 @@
-# gateway
+# Gateway
 
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `nx test gateway` to execute the unit tests via [Jest](https://jestjs.io).
+Node.js library responsible for the communication with the Discord Gateway.
