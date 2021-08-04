@@ -40,7 +40,7 @@ export async function startGateway(config: CobaltGatewayConfig) {
     state.recommendedShardsCount
   );
 
-  state.buckets = await prepareBuckets(
+  state.buckets = prepareBuckets(
     state.recommendedShardsCount,
     config.shardsPerCluster,
     gatewayInfo.session_start_limit.max_concurrency

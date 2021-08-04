@@ -1,10 +1,10 @@
 import { CobaltBucket } from './types';
 
-export async function prepareBuckets(
+export function prepareBuckets(
   totalShards: number,
   shardsPerCluster: number,
   maxConcurrency: number
-): Promise<CobaltBucket[]> {
+): CobaltBucket[] {
   const buckets: CobaltBucket[] = [];
 
   for (
