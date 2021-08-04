@@ -51,6 +51,7 @@ export interface CobaltBucket {
 }
 
 export interface CobaltGatewayState {
+  botToken: string;
   connection: GatewayConnectionConfig;
   recommendedShardsCount: number;
   intentsBit: number;
@@ -96,6 +97,11 @@ export interface ServerPayload<Op extends ServerOpcodes, D> {
   d: D;
 }
 
+export type HeartbeatClientPayload = ClientPayload<
+  ClientOpcodes.HEARTBEAT,
+  number
+>;
+
 export type IdentifyPayload = ClientPayload<
   ClientOpcodes.IDENTIFY,
   {
@@ -107,8 +113,174 @@ export type IdentifyPayload = ClientPayload<
     };
     compress?: boolean;
     large_threshold?: number;
-    shard: [number, number];
-    presence: any;
+    shard?: [number, number];
+    presence?: PresenceUpdate;
     intents: number;
   }
 >;
+
+export interface DispatchPayload<T extends DispatchEventName, D>
+  extends ServerPayload<ServerOpcodes.DISPATCH, D> {
+  t: T;
+  s: number;
+}
+
+export enum DispatchEventName {
+  HELLO = 'HELLO',
+  READY = 'READY',
+  RESUMED = 'RESUMED',
+  RECONNECT = 'RECONNECT',
+  INVALID_SESSION = 'INVALID_SESSION',
+  APPLICATION_COMMAND_CREATE = 'APPLICATION_COMMAND_CREATE',
+  APPLICATION_COMMAND_UPDATE = 'APPLICATION_COMMAND_UPDATE',
+  APPLICATION_COMMAND_DELETE = 'APPLICATION_COMMAND_DELETE',
+  CHANNEL_CREATE = 'CHANNEL_CREATE',
+  CHANNEL_UPDATE = 'CHANNEL_UPDATE',
+  CHANNEL_DELETE = 'CHANNEL_DELETE',
+  CHANNEL_PINS_UPDATE = 'CHANNEL_PINS_UPDATE',
+  THREAD_CREATE = 'THREAD_CREATE',
+  THREAD_UPDATE = 'THREAD_UPDATE',
+  THREAD_DELETE = 'THREAD_DELETE',
+  THREAD_LIST_SYNC = 'THREAD_LIST_SYNC',
+  THREAD_MEMBER_UPDATE = 'THREAD_MEMBER_UPDATE',
+  THREAD_MEMBERS_UPDATE = 'THREAD_MEMBERS_UPDATE',
+  GUILD_CREATE = 'GUILD_CREATE',
+  GUILD_UPDATE = 'GUILD_UPDATE',
+  GUILD_DELETE = 'GUILD_DELETE',
+  GUILD_BAN_ADD = 'GUILD_BAN_ADD',
+  GUILD_BAN_REMOVE = 'GUILD_BAN_REMOVE',
+  GUILD_EMOJIS_UPDATE = 'GUILD_EMOJIS_UPDATE',
+  GUILD_STICKERS_UPDATE = 'GUILD_STICKERS_UPDATE',
+  GUILD_INTEGRATIONS_UPDATE = 'GUILD_INTEGRATIONS_UPDATE',
+  GUILD_MEMBER_ADD = 'GUILD_MEMBER_ADD',
+  GUILD_MEMBER_REMOVE = 'GUILD_MEMBER_REMOVE',
+  GUILD_MEMBER_UPDATE = 'GUILD_MEMBER_UPDATE',
+  GUILD_MEMBERS_CHUNK = 'GUILD_MEMBERS_CHUNK',
+  GUILD_ROLE_CREATE = 'GUILD_ROLE_CREATE',
+  GUILD_ROLE_UPDATE = 'GUILD_ROLE_UPDATE',
+  GUILD_ROLE_DELETE = 'GUILD_ROLE_DELETE',
+  INTEGRATION_CREATE = 'INTEGRATION_CREATE',
+  INTEGRATION_UPDATE = 'INTEGRATION_UPDATE',
+  INTEGRATION_DELETE = 'INTEGRATION_DELETE',
+  INTERACTION_CREATE = 'INTERACTION_CREATE',
+  INVITE_CREATE = 'INVITE_CREATE',
+  INVITE_DELETE = 'INVITE_DELETE',
+  MESSAGE_CREATE = 'MESSAGE_CREATE',
+  MESSAGE_UPDATE = 'MESSAGE_UPDATE',
+  MESSAGE_DELETE = 'MESSAGE_DELETE',
+  MESSAGE_DELETE_BULK = 'MESSAGE_DELETE_BULK',
+  MESSAGE_REACTION_ADD = 'MESSAGE_REACTION_ADD',
+  MESSAGE_REACTION_REMOVE = 'MESSAGE_REACTION_REMOVE',
+  MESSAGE_REACTION_REMOVE_ALL = 'MESSAGE_REACTION_REMOVE_ALL',
+  MESSAGE_REACTION_REMOVE_EMOJI = 'MESSAGE_REACTION_REMOVE_EMOJI',
+  PRESENCE_UPDATE = 'PRESENCE_UPDATE',
+  STAGE_INSTANCE_CREATE = 'STAGE_INSTANCE_CREATE',
+  STAGE_INSTANCE_DELETE = 'STAGE_INSTANCE_DELETE',
+  STAGE_INSTANCE_UPDATE = 'STAGE_INSTANCE_UPDATE',
+  TYPING_START = 'TYPING_START',
+  USER_UPDATE = 'USER_UPDATE',
+  VOICE_STATE_UPDATE = 'VOICE_STATE_UPDATE',
+  VOICE_SERVER_UPDATE = 'VOICE_SERVER_UPDATE',
+  WEBHOOKS_UPDATE = 'WEBHOOKS_UPDATE',
+}
+
+export interface User {
+  id: string;
+  username: string;
+  discriminator: string;
+  avatar: string | null;
+  bot?: boolean;
+  system?: boolean;
+  mfa_enabled?: boolean;
+  locale?: string;
+  verified?: boolean;
+  email?: string | null;
+  flags?: number; // TODO
+  premium_type?: number; // TODO
+  public_flags?: number;
+}
+
+export interface UnavailableGuild {
+  id: string;
+  unavailable: true;
+}
+
+export type ReadyDispatchPayload = DispatchPayload<
+  DispatchEventName.READY,
+  {
+    v: GatewayVersion;
+    user: User;
+    guilds: UnavailableGuild[];
+    session_id: string;
+    shard?: [number, number];
+    application: {
+      id: string;
+      flags?: number;
+    };
+  }
+>;
+
+export enum PresenceActivityType {
+  GAME = 0,
+  STREAMING = 1,
+  LISTENING = 2,
+  WATCHING = 3,
+  CUSTOM = 4,
+  COMPETING = 5,
+}
+
+export interface PresenceActivityButton {
+  label: string;
+  url: string;
+}
+
+export interface PresenceActivity {
+  name: string;
+  type: PresenceActivityType;
+  url?: string;
+  created_at: number;
+  timestamps?: {
+    start?: number;
+    end?: number;
+  };
+  application_id?: string;
+  details?: string;
+  state?: string;
+  emoji?: {
+    name: string;
+    id?: string;
+    animated?: boolean;
+  };
+  party?: {
+    id?: string;
+    size?: [number, number];
+  };
+  assets?: {
+    large_image?: string;
+    large_text?: string;
+    small_image?: string;
+    small_text?: string;
+  };
+  secrets?: {
+    join?: string;
+    spectate?: string;
+    match?: string;
+  };
+  instance?: boolean;
+  flags?: number;
+  buttons?: PresenceActivityButton[];
+}
+
+export type PresenceStatus =
+  | 'online'
+  | 'dnd'
+  | 'idle'
+  | 'invisible'
+  | 'offline';
+
+export interface PresenceUpdate {
+  since?: number;
+  activities: PresenceActivity[];
+  status: PresenceStatus;
+  afk: boolean;
+}

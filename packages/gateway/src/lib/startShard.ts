@@ -7,6 +7,8 @@ import {
 } from './types';
 import { createUnzip } from 'zlib';
 import { handleShardMessage } from './handleShardMessage';
+import { sendShardMessage } from './sendShardMessage';
+import { identify } from './events';
 
 function createSocket(config: GatewayConnectionConfig) {
   const params = new URLSearchParams();
@@ -21,29 +23,31 @@ function createSocket(config: GatewayConnectionConfig) {
   return socket;
 }
 
-export async function startShard(
-  shard: CobaltShard,
-  state: CobaltGatewayState
-) {
+export function startShard(shard: CobaltShard, state: CobaltGatewayState) {
   const unzip = createUnzip();
 
-  unzip.on('data', (ddd) => {
-    // TODO: better parsing
-    handleShardMessage(shard, JSON.parse(ddd.toString('utf8')));
+  unzip.on('data', (data) => {
+    const unparsedPayload = JSON.parse(data.toString('utf8'));
+    handleShardMessage(shard, state, unparsedPayload);
   });
 
   shard.ws = createSocket(state.connection);
 
   shard.ws.onopen = () => {
     logger.log('debug', 'Opened WS connection for shard %d', shard.id);
+
+    sendShardMessage(shard, identify(state.botToken, state.intentsBit));
   };
 
-  shard.ws.onmessage = (message) => {
-    if (state.connection.compress === 'zlib-stream') {
-      unzip.write(message.data);
+  shard.ws.onmessage = ({ data }) => {
+    if (
+      typeof data !== 'string' ||
+      state.connection.compress === 'zlib-stream'
+    ) {
+      unzip.write(data);
     } else {
-      // TODO: better parsing
-      handleShardMessage(shard, JSON.parse(message.data as string));
+      const unparsedPayload = JSON.parse(data);
+      handleShardMessage(shard, state, unparsedPayload);
     }
   };
 }

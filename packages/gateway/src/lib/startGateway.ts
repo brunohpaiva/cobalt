@@ -17,6 +17,7 @@ export async function startGateway(config: CobaltGatewayConfig) {
   const gatewayInfo = await get<DApiGatewayBot>(config.botToken, 'gateway/bot');
   // TODO: error handling
 
+  state.botToken = config.botToken;
   state.connection = {
     url: config.connection?.url ?? gatewayInfo.url,
     version: config.connection?.version ?? DEFAULT_GATEWAY_VERSION,
