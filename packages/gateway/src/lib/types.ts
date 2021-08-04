@@ -67,3 +67,48 @@ export interface DApiGatewayBot {
     max_concurrency: number;
   };
 }
+
+export enum ClientOpcodes {
+  HEARTBEAT = 1,
+  IDENTIFY = 2,
+  PRESENCE_UPDATE = 3,
+  VOICE_STATE_UPDATE = 4,
+  RESUME = 6,
+  REQEUEST_GUILD_MEMBERS = 8,
+}
+
+export enum ServerOpcodes {
+  DISPATCH = 0,
+  HEARTBEAT = 1,
+  RECONNECT = 7,
+  INVALID_SESSION = 9,
+  HELLO = 10,
+  HEARTBEAT_ACK = 11,
+}
+
+export interface ClientPayload<Op extends ClientOpcodes, D> {
+  op: Op;
+  d: D;
+}
+
+export interface ServerPayload<Op extends ServerOpcodes, D> {
+  op: Op;
+  d: D;
+}
+
+export type IdentifyPayload = ClientPayload<
+  ClientOpcodes.IDENTIFY,
+  {
+    token: string;
+    properties: {
+      $os: string;
+      $browser: string;
+      $device: string;
+    };
+    compress?: boolean;
+    large_threshold?: number;
+    shard: [number, number];
+    presence: any;
+    intents: number;
+  }
+>;
