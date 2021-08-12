@@ -3,13 +3,13 @@ import {
   CobaltGatewayConfig,
   CobaltGatewayState,
   DApiGatewayBot,
-  GatewayVersion,
+  GatewayVersionString,
 } from './types';
 import { get } from '@cobalt/http';
 import { logger } from '../logger';
 import { startShard } from './startShard';
 
-const DEFAULT_GATEWAY_VERSION: GatewayVersion = '9';
+const DEFAULT_GATEWAY_VERSION: GatewayVersionString = '9';
 
 export async function startGateway(config: CobaltGatewayConfig) {
   const state = {} as CobaltGatewayState;

@@ -8,11 +8,13 @@ export interface CobaltGatewayConfig {
   intents?: Intent[];
 }
 
-export type GatewayVersion = '6' | '8' | '9';
+export type GatewayVersionString = '6' | '8' | '9';
+
+export type GatewayVersionNumber = 6 | 8 | 9;
 
 export interface GatewayConnectionConfig {
   url: string;
-  version: GatewayVersion;
+  version: GatewayVersionString;
   encoding: 'json' | 'etf';
   compress?: 'zlib-stream' | false;
 }
@@ -208,7 +210,7 @@ export interface UnavailableGuild {
 export type ReadyDispatchPayload = DispatchPayload<
   DispatchEventName.READY,
   {
-    v: GatewayVersion;
+    v: GatewayVersionNumber;
     user: User;
     guilds: UnavailableGuild[];
     session_id: string;
